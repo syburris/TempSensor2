@@ -10,6 +10,6 @@ namespace TempSensor2
     {
         private long Temp { get; set; }
         private DateTime Time { get; set; }
-
+        
     }
 }

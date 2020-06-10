@@ -37,7 +37,7 @@ namespace TempSensor2
             Console.WriteLine(response.StatusCode);
 
             //write the JSON string to the console
-            Console.WriteLine();
+            
 
 
             
