@@ -20,7 +20,7 @@ namespace TempSensor2
         static void Main(string[] args)
         {
             //instantiate a temperature object
-            Temperature temperature = new Temperature();
+            Sensor temperature = new Sensor();
 
             //define the API url
             string address = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
@@ -36,14 +36,31 @@ namespace TempSensor2
             //write the status code to the console if it's 200
             Console.WriteLine(response.StatusCode);
 
-            //write the JSON string to the console
+            deserialiseJSON(response);
+
             
 
 
             
         }
-       
-        
+
+        //deserialise JSON
+         void deserialiseJSON(string strJSON)
+        {
+            try
+            {
+                var jObject = JsonConvert.DeserializeObject<dynamic>(strJSON);
+
+                Console.WriteLine("Here's our JSON object: " + jObject.toString());
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("We had a problem: " + ex.Message.ToString());
+            }
+
+        }
+
+
     }
 }
 

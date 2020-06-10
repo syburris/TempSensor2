@@ -4,12 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+/*
+{
+  "GetSensorValue":[72.8]
+  
+}
+*/
+
 namespace TempSensor2
 {
-    class Temperature
+    class Sensor
     {
-        private long Temp { get; set; }
-        private DateTime Time { get; set; }
+        private long GetSensorValue { get; set; }
         
     }
 }
