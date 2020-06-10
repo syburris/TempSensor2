@@ -17,7 +17,17 @@ namespace TempSensor2
 {
     class Sensor
     {
-        private long GetSensorValue { get; set; }
+        public double[] GetSensorValue { get; private set; }
+
+        public Sensor()
+        {
+
+        }
+
+        public Sensor(double values)
+        {
+            GetSensorValue = new double[(int)values];
+        }
         
     }
 }
