@@ -36,28 +36,16 @@ namespace TempSensor2
             //write the status code to the console if it's 200
             Console.WriteLine(response.StatusCode);
 
-            deserialiseJSON(response);
+            // lets see if the Sensor Class is working
+            Sensor sensor = new Sensor();
+            double[] values = { 73.8, 74 };
+            sensor.GetSensorValue = values;
+            Array.ForEach(sensor.GetSensorValue, Console.WriteLine);
 
             
 
 
             
-        }
-
-        //deserialise JSON
-         void deserialiseJSON(string strJSON)
-        {
-            try
-            {
-                var jObject = JsonConvert.DeserializeObject<dynamic>(strJSON);
-
-                Console.WriteLine("Here's our JSON object: " + jObject.toString());
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("We had a problem: " + ex.Message.ToString());
-            }
-
         }
 
 
