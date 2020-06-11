@@ -38,8 +38,11 @@ namespace TempSensor2
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                 //Console.WriteLine(reader.ReadToEnd());
                 string json = reader.ReadToEnd();
-                Console.WriteLine(json);
                 Sensor sensor = JsonConvert.DeserializeObject<Sensor>(json);
+                foreach(var value in sensor.GetSensorValue)
+                {
+                    Console.WriteLine(value.ToString() + "°F");
+                }
                 }
            
             /*
