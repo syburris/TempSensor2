@@ -27,12 +27,8 @@ namespace TempSensor2
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/json; charset=utf-8";
 
-
             //capture the response
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-
-            //write the status code to the console if it's 200
-            Console.WriteLine(response.StatusCode);
             using (Stream responseStream = response.GetResponseStream())
             {
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
