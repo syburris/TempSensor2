@@ -34,44 +34,17 @@ namespace TempSensor2
             //write the status code to the console if it's 200
             Console.WriteLine(response.StatusCode);
             using (Stream responseStream = response.GetResponseStream())
-                {
+            {
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                 //Console.WriteLine(reader.ReadToEnd());
                 string json = reader.ReadToEnd();
                 Sensor sensor = JsonConvert.DeserializeObject<Sensor>(json);
-                foreach(var value in sensor.GetSensorValue)
+                foreach (var value in sensor.GetSensorValue)
                 {
-                    Console.WriteLine(value.ToString() + "°F");
+                    Console.WriteLine("The sensor is reading " + value.ToString() + "°F");
                 }
-                }
-           
-            /*
-            // lets see if the Sensor Class is working
-            Sensor sensor = new Sensor();
-            double[] values = { 73.8, 74 };
-            sensor.GetSensorValue = values;
-            Array.ForEach(sensor.GetSensorValue, Console.WriteLine);
-
-            // lets try and parse a json string into a sensor object
-            string json = @"{
-                'GetSensorValue':[72.8]
-            }";
-            Sensor sensor1 = JsonConvert.DeserializeObject<Sensor>(json);
-            Console.WriteLine(sensor1.GetSensorValue[0]); //should output 72.8
-
-            //attempt to parse strJson
-            string strJson = response.ToString();
-            Console.WriteLine(strJson);
-            //Sensor sensor2 = JsonConvert.DeserializeObject<Sensor>(strJson);
-            //Console.WriteLine(sensor2.GetSensorValue[0]); //should display temperature in degrees Fahrenheit on line after 72.8
-            */
-
-
-
-
+            }
         }
-
-
     }
 }
 
