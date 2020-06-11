@@ -21,18 +21,28 @@ namespace TempSensor2
         {
 
             //define the API url
-            string address = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
+            string url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
 
             //intitiate the request
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.ContentType = "application/json; charset=utf-8";
 
 
             //capture the response
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
             //write the status code to the console if it's 200
             Console.WriteLine(response.StatusCode);
-
+            using (Stream responseStream = response.GetResponseStream())
+                {
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                //Console.WriteLine(reader.ReadToEnd());
+                string json = reader.ReadToEnd();
+                Console.WriteLine(json);
+                Sensor sensor = JsonConvert.DeserializeObject<Sensor>(json);
+                }
+           
+            /*
             // lets see if the Sensor Class is working
             Sensor sensor = new Sensor();
             double[] values = { 73.8, 74 };
@@ -51,7 +61,7 @@ namespace TempSensor2
             Console.WriteLine(strJson);
             //Sensor sensor2 = JsonConvert.DeserializeObject<Sensor>(strJson);
             //Console.WriteLine(sensor2.GetSensorValue[0]); //should display temperature in degrees Fahrenheit on line after 72.8
-
+            */
 
 
 
