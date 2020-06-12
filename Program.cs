@@ -19,6 +19,7 @@ namespace TempSensor2
     class Program
     {
         private static System.Timers.Timer aTimer;
+        private static string url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
 
         static void Main(string[] args)
         {
@@ -33,11 +34,22 @@ namespace TempSensor2
             aTimer.Dispose();
 
             Console.WriteLine("Terminating the application...");
+        }
 
-            /*
-            //define the API url
-            string url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
+        private static void SetTimer()
+        {
+            // Create a timer with a one second interval.
+            aTimer = new System.Timers.Timer(1000);
+            // Hook up the Elapsed event for the timer. 
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
 
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
+                              e.SignalTime);
             //intitiate the request
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/json; charset=utf-8";
@@ -55,23 +67,6 @@ namespace TempSensor2
                     Console.WriteLine("The sensor is reading " + value.ToString() + "°F");
                 }
             }
-            */
-        }
-
-        private static void SetTimer()
-        {
-            // Create a timer with a two second interval.
-            aTimer = new System.Timers.Timer(1000);
-            // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-        }
-
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
-                              e.SignalTime);
         }
     }
 }
