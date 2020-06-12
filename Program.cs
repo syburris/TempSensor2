@@ -7,33 +7,32 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
-using System.Dynamic;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
+
 
 namespace TempSensor2
 {
     class Program
     {
         private static System.Timers.Timer aTimer;
-        private static string url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
+        public static string url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
+        public static List<Reading> readings = new List<Reading>();
 
         static void Main(string[] args)
         {
             Console.WriteLine("Beginning experiment...");
-
-            SetTimer();
-
             Console.WriteLine("\nPress the Enter key to exit the application...\n");
             Console.WriteLine("The application started at {0:HH:mm:ss.fff}", DateTime.Now);
+            SetTimer();
             Console.ReadLine();
             aTimer.Stop();
             aTimer.Dispose();
 
             Console.WriteLine("Terminating the application...");
+            Console.WriteLine("A total of " + readings.Count.ToString() + " readings were taken");
+            Console.WriteLine("The 2nd reading was " + readings[1].temp.ToString());
+            Console.WriteLine("It was taken at " + readings[1].time.ToString());
         }
 
         private static void SetTimer()
@@ -62,11 +61,32 @@ namespace TempSensor2
                 //Console.WriteLine(reader.ReadToEnd());
                 string json = reader.ReadToEnd();
                 Sensor sensor = JsonConvert.DeserializeObject<Sensor>(json);
+                LogReading(sensor);
+                /*
                 foreach (var value in sensor.GetSensorValue)
                 {
                     Console.WriteLine("The sensor is reading " + value.ToString() + "°F");
                 }
+                */
             }
+        }
+
+
+        private static void LogReading(Sensor s)
+        {
+            if (s is null)
+            {
+                throw new ArgumentNullException(nameof(s));
+            }
+            Reading r = new Reading();
+            foreach (var value in s.GetSensorValue)
+            {
+                r.temp = value.ToString();
+            }
+            r.time = DateTime.Now.ToString();
+            //Console.WriteLine(r.temp.ToString());
+            //Console.WriteLine(r.time.ToString());
+            readings.Add(r);
         }
     }
 }
