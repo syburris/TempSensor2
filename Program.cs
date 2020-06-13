@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Timers;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.IO;
 using Newtonsoft.Json;
-
+using CsvHelper;
+using System.Globalization;
 
 namespace TempSensor2
 {
     class Program
     {
+        public static string folder = "C:\\Users\\steve\\Desktop\\FTO\\{0}.csv";
         private static System.Timers.Timer aTimer;
         public static string url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Temperature],[1]";
         public static List<Reading> readings = new List<Reading>();
 
         static void Main(string[] args)
         {
+
+            Console.WriteLine("What is the sample name?");
+            string file = Console.ReadLine();
+            string path = string.Format(folder, file);
             Console.WriteLine("Beginning experiment...");
             Console.WriteLine("\nPress the Enter key to exit the application...\n");
             Console.WriteLine("The application started at {0:HH:mm:ss.fff}", DateTime.Now);
@@ -33,6 +35,7 @@ namespace TempSensor2
             Console.WriteLine("A total of " + readings.Count.ToString() + " readings were taken");
             Console.WriteLine("The 2nd reading was " + readings[1].temp.ToString() + "°F");
             Console.WriteLine("It was taken at " + readings[1].time.ToString());
+            GenerateReport(readings, path);
         }
 
         private static void SetTimer()
@@ -58,16 +61,9 @@ namespace TempSensor2
             using (Stream responseStream = response.GetResponseStream())
             {
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                //Console.WriteLine(reader.ReadToEnd());
                 string json = reader.ReadToEnd();
                 Sensor sensor = JsonConvert.DeserializeObject<Sensor>(json);
                 LogReading(sensor);
-                /*
-                foreach (var value in sensor.GetSensorValue)
-                {
-                    Console.WriteLine("The sensor is reading " + value.ToString() + "°F");
-                }
-                */
             }
         }
 
@@ -84,15 +80,17 @@ namespace TempSensor2
                 r.temp = value.ToString();
             }
             r.time = DateTime.Now.ToString();
-            //Console.WriteLine(r.temp.ToString());
-            //Console.WriteLine(r.time.ToString());
             readings.Add(r);
         }
 
         //Generate the report
-        private static void GenerateReport(List<Reading> list)
+        private static void GenerateReport(List<Reading> list, String path)
         {
-
+            using (StreamWriter writer = new StreamWriter(path))
+            using (CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(readings);
+            }
         }
     }
 }
