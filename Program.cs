@@ -31,7 +31,7 @@ namespace TempSensor2
 
             Console.WriteLine("Terminating the application...");
             Console.WriteLine("A total of " + readings.Count.ToString() + " readings were taken");
-            Console.WriteLine("The 2nd reading was " + readings[1].temp.ToString());
+            Console.WriteLine("The 2nd reading was " + readings[1].temp.ToString() + "°F");
             Console.WriteLine("It was taken at " + readings[1].time.ToString());
         }
 
@@ -87,6 +87,12 @@ namespace TempSensor2
             //Console.WriteLine(r.temp.ToString());
             //Console.WriteLine(r.time.ToString());
             readings.Add(r);
+        }
+
+        //Generate the report
+        private static void GenerateReport(List<Reading> list)
+        {
+
         }
     }
 }
